@@ -1,10 +1,14 @@
 package com.katsukosail.soundbox
 
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-object Colors {
+@Composable
+fun CustomTheme(content: @Composable () -> Unit) {
     val GreenPrimary = Color(0xFFC1BF91)    // Primary - Green pastel
     val PinkSecondary = Color(0xFFFBB996)   // Secondary - Soft pink
     val YellowTertiary = Color(0xFFFEDFAD)  // Tertiary - Soft yellow
@@ -16,7 +20,7 @@ object Colors {
     val White = Color(0xFFFFFFFF)
     val Black = Color(0xFF000000)
 
-    val LightColorScheme = lightColorScheme(
+    val lightColors = lightColorScheme(
         primary = GreenPrimary,
         onPrimary = BrownText,
 
@@ -45,7 +49,7 @@ object Colors {
 
     val BrownTextDark = Color(0xFFF2E9D7)
 
-    val DarkColorScheme = darkColorScheme(
+    val darkColors = darkColorScheme(
         primary = GreenPrimaryDark,
         onPrimary = BrownTextDark,
 
@@ -63,6 +67,12 @@ object Colors {
 
         error = Color(0xFFEF9A9A),
         onError = Color(0xFF1C1C1C),
+    )
+    val colorScheme = if(isSystemInDarkTheme()) darkColors else lightColors
+
+    MaterialTheme(
+        colorScheme = colorScheme,
+        content = content
     )
 
 }

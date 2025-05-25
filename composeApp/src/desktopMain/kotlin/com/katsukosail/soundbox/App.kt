@@ -1,50 +1,34 @@
 package com.katsukosail.soundbox
 
-import com.katsukosail.soundbox.Colors.DarkColorScheme
-import com.katsukosail.soundbox.Colors.LightColorScheme
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-
 import soundbox.composeapp.generated.resources.Res
+import soundbox.composeapp.generated.resources.artists
 import soundbox.composeapp.generated.resources.logo_long
+import soundbox.composeapp.generated.resources.playlists
+import soundbox.composeapp.generated.resources.songs
 
 @Composable
 @Preview
 fun App() {
-    MaterialTheme (
-        colorScheme = if (isSystemInDarkTheme()) DarkColorScheme else LightColorScheme
-    ) {
+    CustomTheme {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -57,13 +41,19 @@ fun App() {
                 searchValue = searchInput,
                 searchOnValueChange = { searchInput = it },
                 modifier = Modifier,
-                onOpenDrawer = {!isDrawerOpened}
+                onOpenDrawer = { isDrawerOpened = !isDrawerOpened }
             )
 
             Row(
                 modifier = Modifier.weight(1f)
             ) {
-                SideMenu(isDrawerOpened)
+                SideMenu(isDrawerOpened,
+                    showSongs = {currentScreen = "Canciones"},
+                    showArtists = {currentScreen = "Artistas"},
+                    showAlbums = {currentScreen = "Álbumes"},
+                    showPlaylists = {currentScreen = "Playlists"})
+
+
                 MainContent(currentScreen)
             }
         }
@@ -112,16 +102,15 @@ fun TopBar(
             value = searchValue,
             onValueChange = searchOnValueChange,
             shape = RoundedCornerShape(25.dp),
-            colors = TextFieldDefaults.colors(
-                focusedTextColor = PrimaryBlack,
-                unfocusedTextColor = PrimaryBlack,
-                focusedPlaceholderColor = Beige,
-                unfocusedPlaceholderColor = Beige,
-                focusedContainerColor = LightBeige,
-                unfocusedContainerColor = LightBeige
-            ),
             maxLines = 1,
             singleLine = true,
+            colors = TextFieldDefaults.colors(
+                focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                focusedIndicatorColor = Color.Transparent,    // remove underline (focused)
+                unfocusedIndicatorColor = Color.Transparent,  // remove underline (unfocused)
+                disabledIndicatorColor = Color.Transparent,   // remove underline (disabled)
+            ),
             modifier = Modifier
                 .weight(1f)
         )
@@ -139,17 +128,24 @@ fun TopBar(
 
 @Composable
 fun SideMenu(isDrawerOpened: Boolean,
-    modifier: Modifier = Modifier
+             showSongs: () -> Unit,
+             showArtists: () -> Unit,
+             showAlbums: () -> Unit,
+             showPlaylists: () -> Unit,
+             modifier: Modifier = Modifier
 ) {
-    Column(modifier = Modifier.fillMaxHeight()){
-
-
+    Column(modifier = Modifier.fillMaxHeight(),
+        horizontalAlignment = Alignment.CenterHorizontally){
+        MenuCard("Canciones", Res.drawable.songs, onClick = {showSongs()}, isDrawerOpened)
+        MenuCard("Artistas", Res.drawable.artists, onClick = {showArtists()}, isDrawerOpened)
+        MenuCard("Álbumes", Res.drawable.songs, onClick = {showAlbums()}, isDrawerOpened)
+        MenuCard("Playlists", Res.drawable.playlists, onClick = {showPlaylists()}, isDrawerOpened)
     }
-    
+
 }
 
 @Composable
-fun MenuCard(text: String, onClick: () -> Unit) {
+fun MenuCard(text: String, image: DrawableResource, onClick: () -> Unit, isDrawerOpened: Boolean) {
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(3.dp),
@@ -160,19 +156,36 @@ fun MenuCard(text: String, onClick: () -> Unit) {
             disabledContainerColor = Color.Red
         ),
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 6.dp)
+            .padding(8.dp)
             .clickable { onClick() }
     ) {
-        Text(
-            text = text,
-            fontSize = 16.sp,
-            color = Color.White,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp)
-        )
+        if (isDrawerOpened) {
+            Row (verticalAlignment = Alignment.CenterVertically) {
+                Image(painter = painterResource(image), contentDescription = text, modifier = Modifier.size(30.dp))
+                Spacer(modifier = Modifier.size(8.dp))
+                Text(
+                    text = text,
+                    fontSize = 25.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp)
+                )
+            }
+        } else {
+            Column (horizontalAlignment = Alignment.CenterHorizontally) {
+                Image(painter = painterResource(image), contentDescription = text, modifier = Modifier.size(30.dp))
+                Spacer(modifier = Modifier.size(8.dp))
+                Text(
+                    text = text,
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp)
+                )
+            }
+        }
+
     }
 }
+
 
 @Composable
 fun MainContent(

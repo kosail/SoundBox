@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://github.com/kosail/SoundBox/blob/main/composeApp/src/desktopMain/composeResources/drawable/logo_long.png" alt="soundbox_logo" width="1080px"/>
+    <img src="https://github.com/kosail/SoundBox/blob/main/composeApp/src/desktopMain/composeResources/drawable/logo_long.webp" alt="soundbox_logo" width="1080px"/>
 </p>
 
 # SoundBox

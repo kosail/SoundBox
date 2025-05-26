@@ -2,6 +2,7 @@ package com.katsukosail.soundbox
 
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import com.katsukosail.soundbox.ui.Home
 import org.jetbrains.compose.resources.painterResource
 import soundbox.composeapp.generated.resources.Res
 import soundbox.composeapp.generated.resources.favicon
@@ -14,6 +15,6 @@ fun main() = application {
         title = "SoundBox",
         icon = icon
     ) {
-        App()
+        Home()
     }
 }

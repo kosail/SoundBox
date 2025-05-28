@@ -23,7 +23,6 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtimeCompose)
-            implementation("org.xerial:sqlite-jdbc:3.36.0.3")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -31,6 +30,7 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
+            implementation("org.xerial:sqlite-jdbc:3.36.0.3")
         }
     }
 }

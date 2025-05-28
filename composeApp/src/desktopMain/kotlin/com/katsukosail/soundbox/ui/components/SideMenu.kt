@@ -64,11 +64,7 @@ fun MenuCard(
 ) {
     Card(
         shape = RoundedCornerShape(8.dp),
-        // ! Removido para quitar la sombra de elevación, y que así no sea el boton transparente y la sombra negra alrededor
-//        elevation = CardDefaults.cardElevation(3.dp),
         colors = CardColors(
-            // ! Removido en favor de botones transparentes
-//            containerColor = MaterialTheme.colorScheme.primaryContainer,
             containerColor = if (isDarkTheme) slightDarkBackground else slightLightBackground,
             contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
             disabledContentColor = MaterialTheme.colorScheme.onPrimaryContainer,

@@ -1,21 +1,23 @@
 package com.katsukosail.soundbox
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
-import androidx.compose.ui.window.rememberWindowState
-import com.katsukosail.soundbox.database.DatabaseConnection
+import com.katsukosail.soundbox.state.DbDonnectionState
 import com.katsukosail.soundbox.ui.Home
-import com.katsukosail.soundbox.ui.InitializeServices
+import com.katsukosail.soundbox.ui.DbFailInit
 import org.jetbrains.compose.resources.painterResource
 import soundbox.composeapp.generated.resources.Res
 import soundbox.composeapp.generated.resources.favicon
 
 fun main() = application {
     val icon = painterResource(Res.drawable.favicon)
+    val dbState = remember { DbDonnectionState() }
 
     Window(
         onCloseRequest = ::exitApplication,
@@ -23,8 +25,14 @@ fun main() = application {
         icon = icon,
         state = WindowState( size = DpSize(864.dp, 650.dp) )
     ) {
-        // Commented out because there is an issue with the DB, throwing ClassNotFoundException
-//        InitializeServices(exitApp = ::exitApplication) // Initialize database connection or exit the app
-        Home() // Start the app if all went OK
+
+        // Store the DB instance reference across recompositions
+        val dbInitialized by remember { mutableStateOf(dbState.initializeDatabase()) }
+
+        if (!dbInitialized) {
+            DbFailInit(exitApp = ::exitApplication)
+        }
+
+        Home(dbState.db!!) // Start the app if all went OK
     }
 }

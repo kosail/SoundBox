@@ -80,8 +80,10 @@ fun TopBar(
             maxLines = 1,
             singleLine = true,
             colors = TextFieldDefaults.colors(
-                focusedTextColor = MaterialTheme.colorScheme.onPrimary,
-                unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                focusedContainerColor = MaterialTheme.colorScheme.surface,
                 focusedIndicatorColor = Color.Transparent,    // remove underline (focused)
                 unfocusedIndicatorColor = Color.Transparent,  // remove underline (unfocused)
                 disabledIndicatorColor = Color.Transparent,   // remove underline (disabled)

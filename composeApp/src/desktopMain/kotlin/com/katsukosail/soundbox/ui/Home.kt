@@ -7,6 +7,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.katsukosail.soundbox.Theme.CustomTheme
 import com.katsukosail.soundbox.Theme.rememberAppThemeState
+import com.katsukosail.soundbox.ui.components.AddEntryDialog
+import com.katsukosail.soundbox.model.AddEntryForm
 
 import com.katsukosail.soundbox.ui.components.TopBar
 import com.katsukosail.soundbox.ui.components.MainScreen
@@ -17,6 +19,10 @@ import com.katsukosail.soundbox.ui.components.SettingsDialog
 fun Home(){
     val appThemeState = rememberAppThemeState()
 
+    var addFormState by remember {
+        mutableStateOf(AddEntryForm())
+    }
+
     CustomTheme(darkTheme = appThemeState.isDarkTheme) {
         Column(
             modifier = Modifier.fillMaxSize()
@@ -26,6 +32,9 @@ fun Home(){
 
             var isDrawerOpened by remember { mutableStateOf(false) }
             var isSettingsDialogOpen by remember { mutableStateOf(false) }
+
+            // Para abrir y cerrar la ventana de nueva canción/playlist y cambiar entre modo canción y playlist
+            var isAddDialogOpen by remember { mutableStateOf(false) }
 
             TopBar(
                 searchValue = searchInput,
@@ -46,7 +55,10 @@ fun Home(){
                     showAlbums = { currentScreen = "Álbumes" },
                     showGenres = { currentScreen = "Géneros" },
                     showPlaylists = { currentScreen = "Playlists" },
-                    add = { /*TODO*/ }
+                    add = {
+                        isAddDialogOpen = true
+                        addFormState = AddEntryForm() // Resetea todos los campos
+                    }
                 )
 
                 MainScreen(currentScreen)
@@ -57,6 +69,26 @@ fun Home(){
                         darkTheme = appThemeState.isDarkTheme,
                         onThemeChange = { appThemeState.toggleTheme() },
                         modifier = Modifier
+                    )
+                }
+
+                if (isAddDialogOpen) {
+                    AddEntryDialog(
+                        onCloseRequest = {
+                            isAddDialogOpen = false
+                            addFormState = AddEntryForm() // Resetea todos los campos
+                        },
+                        isAddPlaylist = addFormState.isPlaylist,
+                        onAddToggleChange = {
+                            addFormState = addFormState.copy(isPlaylist = !addFormState.isPlaylist)
+                        },
+                        darkTheme = appThemeState.isDarkTheme,
+                        entryForm = addFormState,
+                        onNameChange = { addFormState = addFormState.copy(name = it) },
+                        onDescriptionChange = { addFormState = addFormState.copy(description = it) },
+                        onAlbumChange = { addFormState = addFormState.copy(album = it) },
+                        onGenreChange = { addFormState = addFormState.copy(genre = it) },
+                        onArtistChange = { addFormState = addFormState.copy(artist = it) }
                     )
                 }
             }

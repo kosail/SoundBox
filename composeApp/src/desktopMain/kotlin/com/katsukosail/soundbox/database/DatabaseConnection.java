@@ -18,7 +18,7 @@ public class DatabaseConnection {
             System.out.println("Conectado a la base de datos.");
             return conn;
 
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (Exception e) {
             System.out.println("Error al conectar a la base de datos: " + e.getMessage());
             return null;
         }

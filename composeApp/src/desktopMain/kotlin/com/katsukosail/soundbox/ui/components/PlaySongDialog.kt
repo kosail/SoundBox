@@ -12,15 +12,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
+import com.katsukosail.soundbox.model.ItemType
 import com.katsukosail.soundbox.model.Song
 import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlaySongDialog(
-    song: Song,
+    item: ItemType.SongItem,
     onCloseRequest: () -> Unit
 ) {
+    val song = item.song
     BasicAlertDialog(
         onDismissRequest = onCloseRequest,
         properties = DialogProperties(usePlatformDefaultWidth = false)

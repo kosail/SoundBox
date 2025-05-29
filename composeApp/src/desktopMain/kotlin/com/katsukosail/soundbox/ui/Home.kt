@@ -7,18 +7,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.katsukosail.soundbox.Theme.CustomTheme
 import com.katsukosail.soundbox.Theme.rememberAppThemeState
-import com.katsukosail.soundbox.database.dao.ArtistaDAO
-import com.katsukosail.soundbox.ui.components.AddEntryDialog
 import com.katsukosail.soundbox.model.AddEntryForm
-
-import com.katsukosail.soundbox.ui.components.TopBar
-import com.katsukosail.soundbox.ui.components.MainScreen
-import com.katsukosail.soundbox.ui.components.SideMenu
-import com.katsukosail.soundbox.ui.components.SettingsDialog
-import java.sql.Connection
+import com.katsukosail.soundbox.ui.components.*
 
 @Composable
-fun Home(dbConnection: Connection){
+fun Home(){
     val appThemeState = rememberAppThemeState()
 
     var addFormState by remember {

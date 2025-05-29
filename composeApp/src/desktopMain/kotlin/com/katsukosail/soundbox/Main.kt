@@ -20,7 +20,10 @@ fun main() = application {
     val dbState = remember { DbDonnectionState() }
 
     Window(
-        onCloseRequest = ::exitApplication,
+        onCloseRequest = {
+            dbState.close()
+            ::exitApplication
+        },
         title = "SoundBox",
         icon = icon,
         state = WindowState( size = DpSize(864.dp, 650.dp) )
@@ -33,6 +36,6 @@ fun main() = application {
             DbFailInit(exitApp = ::exitApplication)
         }
 
-        Home(dbState.db!!) // Start the app if all went OK
+        Home()
     }
 }
